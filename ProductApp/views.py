@@ -17,18 +17,20 @@ def create_product(request):
     if serializer.is_valid():
         products = serializer.save()
 
-        # Menjadwalkan eksekusi update_variant pada tanggal dan jam tertentu
-        scheduled_time = datetime.strptime('2023-07-15T15:34:29.193761Z', '%Y-%m-%dT%H:%M:%S.%fZ')
-
-        # Validasi tanggal lebih kecil dari waktu sekarang
-        if scheduled_time < datetime.now():
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Scheduled time cannot be in the past'
-            }, status=status.HTTP_400_BAD_REQUEST)
-        
         for product in products:
-            update_variant.apply_async(args=[product.id], eta=scheduled_time)
+            for variant in product.variants.all():
+                active_time = variant.active_time
+
+                # Validasi active_time tidak lebih kecil dari waktu sekarang
+                if active_time and active_time < timezone.now():
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'active_time cannot be in the past'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                
+                # Jadwalkan update_variant sesuai dengan active_time (optional)
+                if active_time and active_time > timezone.now():
+                    update_variant.apply_async(args=[variant.id], eta=active_time)
 
         if isinstance(products, list):
             num_products = len(products)
