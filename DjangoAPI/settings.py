@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y)$inz%46h0k!m@f!9gyaliw1)yy7h5&3he&hz*e76tbfu$*u#'
+SECRET_KEY = 'j0@ka(p9im=u25bbp1o*7&4#td-_qsgks2t4y)6)=gj&--!c-!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['167.99.192.225']
+ALLOWED_HOSTS = ['172.20.10.2']
 
 
 # Application definition
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'ProductApp.apps.ProductappConfig',
     'celery'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,7 +87,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -126,7 +124,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 CELERY_IMPORTS = ('ProductApp.tasks')
